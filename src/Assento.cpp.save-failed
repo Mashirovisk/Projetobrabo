@@ -1,0 +1,115 @@
+#include "include/Assento.h"
+#include "include/Voo.h"
+#include <iostream>
+
+    using namespace std;
+
+    Assento Assento::listaAssento[MAXASSENTOS];
+    int Assento::qntAsse=0;
+
+
+
+
+    Assento::Assento(){
+        num=0;
+        voo_id=0;
+        status=0;
+    }
+
+
+
+    Assento::Assento(int numero,int vooId,int st){
+        num =numero;
+        voo_id=vooId;
+        status=st;
+    }
+
+
+    int Assento::getNum()const{
+        return num;
+    }
+    int Assento::getVooId()const{
+        return voo_id;
+    }
+    int Assento::getstatus()const{
+        return status;
+    }
+    void Assento::setNum(int numero){
+        if(numero<0){
+            cout<<"Erro: numero negativo";
+            return;
+        }
+        num=numero;
+    }
+    void Assento::setVooId(int vooId){
+        voo_id=vooId;
+    }
+    void Assento::setStatus(int st){
+        status=st;
+    }
+
+    void Assento::CadastrarAssento(){
+
+        int numero,vooId,status;
+
+
+        cout<<"Digite o numero do assento:";
+        cin>>numero;
+
+
+
+        cout<<"Digite o ID do voo:";
+        cin>>vooId;
+        Voo* verificar = Voo::buscarporId(vooId);
+        if (verificar == nullptr) {
+                cout << "Voo nao existe!" << endl;
+                return;
+        }
+
+
+        for(int i=0;i<qntAsse;i++){
+            if(listaAssento[i].getNum()==numero&&listaAssento[i].getVooId()==vooId){
+                cout << "Erro: Assento ja cadastrado!" << endl;
+                return;
+            }
+        }
+
+
+        cout<<"Digite o status do assento (0 para disponivel,1 para ocupado)"<<endl;
+        cin>>status;
+
+
+        if(qntAsse < MAXASSENTOS){
+            listaAssento[qntAsse]=Assento(numero,vooId,status);
+            qntAsse++;
+            cout<<"Cadastrado com sucesso"<<endl;
+        }else{
+             cout<<"Erro: limite alcancado!"<<endl;
+        }
+
+        Assento novoassento(numero,vooId,status);
+
+
+        verificar->adicionarAssento(novoassento);
+
+     }
+
+
+    void Assento::ListarAssentos() {
+    if (qntAsse == 0) {
+        cout << "Nenhum assento cadastrado!" << endl;
+        return;
+    }
+
+    for (int i = 0; i < qntAsse; i++) {
+        cout << "Assento: " << listaAssento[i].getNum() << ", Voo ID: " << listaAssento[i].getVooId()
+             << ", Status: " << (listaAssento[i].getstatus() == 0 ? "Disponível" : "Ocupado") << endl;
+    }
+}
+
+
+
+
+
+
+

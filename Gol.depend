@@ -1,0 +1,46 @@
+# depslib dependency file v1.0
+1733545682 source:c:\users\mashiro\downloads\a\gol\src\assento.cpp
+	"include/Assento.h"
+	"include/Voo.h"
+	<iostream>
+
+1733407690 source:c:\users\mashiro\downloads\a\gol\src\reserva.cpp
+	"include/Reserva.h"
+
+1733545176 source:c:\users\mashiro\downloads\a\gol\src\voo.cpp
+	"include/Voo.h"
+	"include/Assento.h"
+	<iostream>
+	<cstring>
+
+1733544346 source:c:\users\mashiro\downloads\a\gol\src\tripulacao.cpp
+	<iostream>
+	<cstring>
+	"include/Tripulacao.h"
+
+1733544735 source:c:\users\mashiro\downloads\a\gol\main.cpp
+	"include/Assento.h"
+	"include/Passageiro.h"
+	"include/Tripulacao.h"
+	"include/Voo.h"
+	<iostream>
+	<iostream>
+
+1733545439 c:\users\mashiro\downloads\a\gol\include\assento.h
+
+1733434529 c:\users\mashiro\downloads\a\gol\include\passageiro.h
+	<iostream>
+	<string.h>
+
+1733435300 source:c:\users\mashiro\downloads\a\gol\src\passageiro.cpp
+	"include/Passageiro.h"
+	<iostream>
+
+1733531662 c:\users\mashiro\downloads\a\gol\include\tripulacao.h
+	<iostream>
+	<cstring>
+
+1733545130 c:\users\mashiro\downloads\a\gol\include\voo.h
+	"Tripulacao.h"
+	"Assento.h"
+
