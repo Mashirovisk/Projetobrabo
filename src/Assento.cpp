@@ -4,8 +4,6 @@
 #include <cstdio>
 #include <iostream>
 
-
-
     using namespace std;
 
     Assento* Assento::listaAssento[MAXASSENTOS];
@@ -52,9 +50,9 @@
         status=st;
     }
 
-    void Assento::CadastrarAssento(){
+void Assento::CadastrarAssento(){
 
-        int numero,vooId,status;
+    int numero,vooId,status;
 
 
         cout<<"Digite o numero do assento:";
@@ -107,7 +105,7 @@ void Assento::ListarAssentos() {
 
     for (int i = 0; i < qntAsse; i++) {
         cout << "Assento: " << listaAssento[i]->getNum() << ", Voo ID: " << listaAssento[i]->getVooId()
-             << ", Status: " << (listaAssento[i]->getstatus() == 0 ? "Disponivel" : "Ocupado") << endl;
+             << ", Status: " << (listaAssento[i]->getstatus() == 0 ? "Disponível" : "Ocupado") << endl;
     }
 }
 
@@ -186,7 +184,7 @@ void Assento::salvarEmArquivoBinario(const char* nomeArquivo) {
     }
 
     fclose(arquivo);
-    cout << "Assentos salvos com sucesso no arquivo binario!" << endl;
+    cout << "Assentos salvos com sucesso no arquivo binário!" << endl;
 }
 
 void Assento::carregarDeArquivoBinario(const char* nomeArquivo) {
@@ -201,7 +199,7 @@ void Assento::carregarDeArquivoBinario(const char* nomeArquivo) {
 
     // Garantir que não excedemos o máximo permitido
     if (qntAsse > MAXASSENTOS) {
-        cout << "Erro: numero de assentos no arquivo excede o limite permitido!" << endl;
+        cout << "Erro: número de assentos no arquivo excede o limite permitido!" << endl;
         fclose(arquivo);
         return;
     }
@@ -218,5 +216,5 @@ void Assento::carregarDeArquivoBinario(const char* nomeArquivo) {
     }
 
     fclose(arquivo);
-    cout << "Assentos carregados com sucesso do arquivo binario!" << endl;
+    cout << "Assentos carregados com sucesso do arquivo binário!" << endl;
 }

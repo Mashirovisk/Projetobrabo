@@ -4,6 +4,7 @@
 #include "include/Passageiro.h"
 #include "include/Assento.h"
 
+#include <fstream>
 using namespace std;
 
 Reserva* Reserva::Reservas[MAXRESERVA];
@@ -22,14 +23,25 @@ Reserva::Reserva() {
 }
 
 
+Reserva::Reserva(int reservaId, int vooId, int passageiroId, int assentoId) {
+    this->reserva_id = reservaId;
+    this->voo_Id = vooId;
+    this->Passageiro_id = passageiroId;
+    this->Assento_id = assentoId;
 
+    // Depuração
+    cout << "Construtor de Reserva chamado com valores: "
+         << reservaId << ", " << vooId << ", " << passageiroId << ", " << assentoId << endl;
+}
+
+/*
 Reserva::Reserva(int id, int vooId, int passageiroId, int assentoId) {
     reserva_id = id;
     voo_Id = vooId;
     Passageiro_id = passageiroId;
     Assento_id = assentoId;
 }
-
+*/
 
 // Getter e Setter para voo_Id
     int Reserva::getVoo_Id() {
@@ -187,6 +199,8 @@ void Reserva::listarReservas() {
             cout << "Passageiro ID: " << Reservas[i]->getPassageiro_id() << endl;
             cout << "Assento ID: " << Reservas[i]->getAssento_id() << endl;
             cout << "---------------------------" << endl;
+        } else {
+            cout << "Reserva " << i << " é nula." << endl;
         }
     }
 }
@@ -303,48 +317,98 @@ void Reserva::AtualizarReserva(int reservaId) {
     verificarVoo->adicionarReserva(this);
 }
 
-void Reserva::carregarDeArquivoBinario(const char* nomeArquivo) {
-    FILE* arquivo = fopen(nomeArquivo, "rb");  // Abre o arquivo para leitura binária
+
+
+
+
+
+void Reserva::salvarEmArquivoBinario(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "wb");
     if (arquivo == nullptr) {
-        cout << "Erro ao abrir o arquivo para carregar as reservas." << endl;
+        cout << "Erro ao abrir o arquivo para salvar!" << endl;
         return;
     }
 
-    // Lê a quantidade de reservas
-    fread(&qntRes, sizeof(qntRes), 1, arquivo);
+    // Salva a quantidade de reservas no início do arquivo
+    fwrite(&qntRes, sizeof(int), 1, arquivo);
+    cout << "Número de reservas a serem salvas: " << qntRes << endl;
 
-    // Lê todas as reservas
-    for (int i = 0; i < qntRes; ++i) {
-        Reserva* reserva = new Reserva();
-        fread(reserva, sizeof(Reserva), 1, arquivo);  // Lê os dados de cada reserva
-        Reservas[i] = reserva;  // Adiciona a reserva ao vetor estático
-    }
-
-    fclose(arquivo);  // Fecha o arquivo
-    cout << "Reservas carregadas com sucesso!" << endl;
-}
-
-
-
-void Reserva::salvarEmArquivo(const char* nomeArquivo) {
-    FILE* arquivo = fopen(nomeArquivo, "wb");  // Abre o arquivo para escrita binária
-    if (arquivo == nullptr) {
-        cout << "Erro ao abrir o arquivo para salvar as reservas." << endl;
-        return;
-    }
-
-    // Salva a quantidade de reservas
-    fwrite(&qntRes, sizeof(qntRes), 1, arquivo);
-
-    // Salva todas as reservas
-    for (int i = 0; i < qntRes; ++i) {
+    // Salva cada reserva no arquivo
+    for (int i = 0; i < qntRes; i++) {
         if (Reservas[i] != nullptr) {
-            // Escreve os dados da reserva
-            fwrite(Reservas[i], sizeof(Reserva), 1, arquivo);
+            // Exibe a saída de depuração com base na reserva, começando de 1
+            cout << "Debug: reserva " << (i + 1) << " - reservaId: " << Reservas[i]->getReserva_id()
+                 << ", vooId: " << Reservas[i]->getVoo_Id()
+                 << ", passageiroId: " << Reservas[i]->getPassageiro_id()
+                 << ", assentoId: " << Reservas[i]->getAssento_id() << endl;
+
+            // Escreve os dados da reserva no arquivo
+            fwrite(&Reservas[i]->reserva_id, sizeof(int), 1, arquivo);
+            fwrite(&Reservas[i]->voo_Id, sizeof(int), 1, arquivo);
+            fwrite(&Reservas[i]->Passageiro_id, sizeof(int), 1, arquivo);
+            fwrite(&Reservas[i]->Assento_id, sizeof(int), 1, arquivo);
         }
     }
 
-    fclose(arquivo);  // Fecha o arquivo
-    cout << "Reservas salvas com sucesso!" << endl;
+    fclose(arquivo);
+    cout << "Reservas salvas com sucesso no arquivo binário!" << endl;
 }
+
+
+
+void Reserva::carregarDeArquivoBinario(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "rb");
+    if (arquivo == nullptr) {
+        cout << "Erro ao abrir o arquivo para carregar!" << endl;
+        return;
+    }
+
+    // Lê a quantidade de reservas do arquivo
+    if (fread(&qntRes, sizeof(int), 1, arquivo) != 1) {
+        cout << "Erro ao ler a quantidade de reservas." << endl;
+        fclose(arquivo);
+        return;
+    }
+
+    cout << "Número de reservas a serem carregadas: " << qntRes << endl;
+
+    // Verifica se a quantidade de reservas excede o limite máximo permitido
+    if (qntRes > MAXRESERVA) {
+        cout << "Erro: número de reservas no arquivo excede o limite permitido!" << endl;
+        fclose(arquivo);
+        return;
+    }
+
+    // Carrega cada reserva do arquivo
+    for (int i = 0; i < qntRes; i++) {
+        int reservaId, vooId, passageiroId, assentoId;
+
+        // Lê os dados de cada reserva do arquivo
+        if (fread(&reservaId, sizeof(int), 1, arquivo) != 1 ||
+            fread(&vooId, sizeof(int), 1, arquivo) != 1 ||
+            fread(&passageiroId, sizeof(int), 1, arquivo) != 1 ||
+            fread(&assentoId, sizeof(int), 1, arquivo) != 1) {
+            cout << "Erro ao ler os dados da reserva " << i << "." << endl;
+            fclose(arquivo);
+            return;
+        }
+
+        // Exibe os dados carregados para depuração
+        cout << "Debug: reserva " << (i + 1) << " - reservaId: " << reservaId
+             << ", vooId: " << vooId
+             << ", passageiroId: " << passageiroId
+             << ", assentoId: " << assentoId << endl;
+
+        // Criação de uma nova reserva e armazenamento no vetor estático
+        if (Reservas[i] != nullptr) {
+            delete Reservas[i]; // Libera a memória existente, se necessário
+        }
+        Reservas[i] = new Reserva(reservaId, vooId, passageiroId, assentoId);
+    }
+
+    fclose(arquivo);
+    cout << "Reservas carregadas com sucesso do arquivo binário!" << endl;
+}
+
+
 

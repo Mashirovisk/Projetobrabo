@@ -29,18 +29,47 @@ void menuPassageiros() {
             int codigo;
             char nome[TAM_NOME], endereco[TAM_ENDERECO], telefone[TAM_TELEFONE];
             bool fidelidade;
+
             cout << "\nDigite os dados do passageiro:\n";
+
+            // Validação do código
             cout << "Código: ";
             cin >> codigo;
+            while (codigo < 0) {
+                cout << "O código não pode ser negativo. Digite novamente: ";
+                cin >> codigo;
+            }
             cin.ignore(); // Limpar o buffer
+
+            // Validação de campos obrigatórios
             cout << "Nome: ";
             cin.getline(nome, TAM_NOME);
+            while (strlen(nome) == 0) {
+                cout << "O nome nao pode ser vazio. Digite novamente: ";
+                cin.getline(nome, TAM_NOME);
+            }
+
             cout << "Endereço: ";
             cin.getline(endereco, TAM_ENDERECO);
+            while (strlen(endereco) == 0) {
+                cout << "O endereço nao pode ser vazio. Digite novamente: ";
+                cin.getline(endereco, TAM_ENDERECO);
+            }
+
             cout << "Telefone: ";
             cin.getline(telefone, TAM_TELEFONE);
+            while (strlen(telefone) == 0) {
+                cout << "O telefone nao pode ser vazio. Digite novamente: ";
+                cin.getline(telefone, TAM_TELEFONE);
+            }
+
+            // Validação da fidelidade
             cout << "Fidelidade (1 para Sim, 0 para Não): ";
             cin >> fidelidade;
+            while (fidelidade != 0 && fidelidade != 1) {
+                cout << "Entrada invalida. Digite 1 para Sim ou 0 para Nao: ";
+                cin >> fidelidade;
+            }
 
             Passageiro p(codigo, nome, endereco, telefone, fidelidade);
             if (Passageiro::adicionarPassageiro(p)) {
@@ -48,7 +77,6 @@ void menuPassageiros() {
             } else {
                 cout << "Erro ao adicionar passageiro. Lista cheia!\n";
             }
-            break;
         }
         case 2:
             cout << "\nLista de Passageiros:\n";
@@ -124,27 +152,55 @@ void menuTripulantes() {
 
         switch (opcao) {
         case 1: {
-            int codigo,cargo;
+            int codigo, cargo;
             char nome[TAM_NOME], endereco[TAM_ENDERECO], telefone[TAM_TELEFONE];
 
             cout << "\nDigite os dados do tripulante:\n";
-            cout << "Codigo: ";
+
+            // Validação do código
+            cout << "Código: ";
             cin >> codigo;
+            while (codigo < 0) {
+                cout << "O código não pode ser negativo. Digite novamente: ";
+                cin >> codigo;
+            }
             cin.ignore(); // Limpar o buffer
+
+            // Validação de campos obrigatórios
             cout << "Nome: ";
             cin.getline(nome, TAM_NOME);
-            cout << "Endereco: ";
+            while (strlen(nome) == 0) {
+                cout << "O nome não pode ser vazio. Digite novamente: ";
+                cin.getline(nome, TAM_NOME);
+            }
+
+            cout << "Endereço: ";
             cin.getline(endereco, TAM_ENDERECO);
+            while (strlen(endereco) == 0) {
+                cout << "O endereço não pode ser vazio. Digite novamente: ";
+                cin.getline(endereco, TAM_ENDERECO);
+            }
+
             cout << "Telefone: ";
             cin.getline(telefone, TAM_TELEFONE);
-            cout << "Cargo (1-Piloto) (2-Copiloto) (3-Comissario): ";
-            cin>>cargo;
+            while (strlen(telefone) == 0) {
+                cout << "O telefone não pode ser vazio. Digite novamente: ";
+                cin.getline(telefone, TAM_TELEFONE);
+            }
+
+            // Validação do cargo
+            cout << "Cargo (1-Piloto, 2-Copiloto, 3-Comissário): ";
+            cin >> cargo;
+            while (cargo < 1 || cargo > 3) {
+                cout << "Entrada inválida. Digite 1 para Piloto, 2 para Copiloto ou 3 para Comissário: ";
+                cin >> cargo;
+            }
 
             Tripulacao t(codigo, nome, endereco, telefone, cargo);
             if (Tripulacao::adicionarTripulante(t)) {
                 cout << "Tripulante adicionado com sucesso!\n";
             } else {
-                cout << "Erro ao adicionar tripulante\n";
+                cout << "Erro ao adicionar tripulante.\n";
             }
             break;
         }
@@ -432,15 +488,15 @@ int main() {
             Passageiro::salvarEmArquivoBinario("passageiros.bin");
             Assento::salvarEmArquivoBinario("assentos.bin");
             Tripulacao::salvarEmArquivoBinario("tripulantes.bin");
-            Reserva::salvarEmArquivo("Reserva.bin");
-            Voo::salvarEmArquivoBinario("Reserva.bin");
+            Reserva::salvarEmArquivoBinario("Reserva.bin");
+            Voo::salvarEmArquivoBinario("Voo.bin");
             break;
         case 7:
             Passageiro::carregarDeArquivoBinario("passageiros.bin");
             Assento::carregarDeArquivoBinario("assentos.bin");
             Tripulacao::carregarDeArquivoBinario("tripulantes.bin");
             Reserva::carregarDeArquivoBinario("Reserva.bin");
-            Voo::carregarDeArquivoBinario("Reserva.bin");
+            Voo::carregarDeArquivoBinario("Voo.bin");
             break;
         case 8:
             cout << "Saindo.....\n";

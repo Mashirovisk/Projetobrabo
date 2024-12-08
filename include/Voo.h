@@ -102,6 +102,9 @@ public:
 
     static void salvarEmArquivoBinario(const char* nomeArquivo);
     static void carregarDeArquivoBinario(const char* nomeArquivo);
+
+
+
 };
 
 #endif  // FIM DO VOO_H

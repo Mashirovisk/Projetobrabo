@@ -22,7 +22,8 @@ class Reserva
     public:
 
     Reserva();
-    Reserva(int id, int vooId, int passageiroId, int assentoId);
+    //(int id, int vooId, int passageiroId, int assentoId);
+    Reserva(int reservaId, int vooId, int passageiroId, int assentoId);
 
     // Getter e Setter para voo_Id
     int getVoo_Id();
@@ -52,8 +53,12 @@ class Reserva
     static Reserva* buscarporId(int id);
     static void Deletar(int num);
     void AtualizarReserva(int reservaId);
-    static void salvarEmArquivo(const char* nomeArquivo);
+
+
+    static void salvarEmArquivoBinario(const char* nomeArquivo);
     static void carregarDeArquivoBinario(const char* nomeArquivo);
+
+
 
 
 };

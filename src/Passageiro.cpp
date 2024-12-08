@@ -181,8 +181,8 @@ Passageiro* Passageiro::BuscarPasporId(int id){
         if(listaPassageiros[i].getCodigo()==id){
             return &listaPassageiros[i];
         }
-        return nullptr;
     }
+    return nullptr;
 }
 
 

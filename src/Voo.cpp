@@ -42,6 +42,7 @@ Voo::Voo(int id, const char* origem, const char* destino, const char* data, cons
     qntAss=0;
     qntRess=0;
 }
+
 int Voo::getId() const {
     return id;
 }
@@ -298,7 +299,7 @@ void Voo::listarVoos() {
         for(int k=0;k<voo.qntRess;k++){
             Reserva* Reserva = voo.Reservas_on[k];
             cout<<"Reserva ID:"<<Reserva->getReserva_id();
-            cout <<"Passageiro ID"<<Reserva->getPassageiro_id();
+            cout <<"Passageiro ID:"<<Reserva->getPassageiro_id();
         }
 
 
@@ -501,29 +502,44 @@ void Voo::DeletarReserva(int id) {
 }
 
 void Voo::carregarDeArquivoBinario(const char* nomeArquivo) {
-    // Abre o arquivo para leitura binária
     FILE* arquivo = fopen(nomeArquivo, "rb");
-    if (arquivo == NULL) {
+    if (arquivo == nullptr) {
         printf("Erro ao abrir o arquivo para carregar!\n");
         return;
     }
 
-    // Carregar a quantidade de voos
+    // Carrega a quantidade de voos
     fread(&qntVoo, sizeof(int), 1, arquivo);
 
-    // Carregar os dados dos voos
     for (int i = 0; i < qntVoo; i++) {
-        fread(&Voos[i], sizeof(Voo), 1, arquivo);
+        Voo& voo = Voos[i];
+
+        // Carrega os dados básicos do voo
+        fread(&voo, sizeof(Voo), 1, arquivo);
+
+        // Carrega os assentos associados ao voo
+        fread(&voo.qntAss, sizeof(int), 1, arquivo);
+        for (int j = 0; j < voo.qntAss; j++) {
+            voo.Assentos_on[j] = new Assento();
+            fread(voo.Assentos_on[j], sizeof(Assento), 1, arquivo);
+        }
+
+        // Carrega as reservas associadas ao voo
+        fread(&voo.qntRess, sizeof(int), 1, arquivo);
+        for (int k = 0; k < voo.qntRess; k++) {
+            voo.Reservas_on[k] = new Reserva();
+            fread(voo.Reservas_on[k], sizeof(Reserva), 1, arquivo);
+        }
     }
 
     fclose(arquivo);
-    printf("Voos carregados com sucesso de arquivo binário!\n");
+    printf("Dados dos voos, assentos e reservas carregados com sucesso!\n");
 }
 
+
 void Voo::salvarEmArquivoBinario(const char* nomeArquivo) {
-    // Abre o arquivo para escrita binária
     FILE* arquivo = fopen(nomeArquivo, "wb");
-    if (arquivo == NULL) {
+    if (arquivo == nullptr) {
         printf("Erro ao abrir o arquivo para salvar!\n");
         return;
     }
@@ -531,12 +547,26 @@ void Voo::salvarEmArquivoBinario(const char* nomeArquivo) {
     // Salva a quantidade de voos
     fwrite(&qntVoo, sizeof(int), 1, arquivo);
 
-    // Salva os dados dos voos
     for (int i = 0; i < qntVoo; i++) {
-        fwrite(&Voos[i], sizeof(Voo), 1, arquivo);
+        Voo& voo = Voos[i];
+
+        // Salva os dados básicos do voo
+        fwrite(&voo, sizeof(Voo), 1, arquivo);
+
+        // Salva os assentos associados ao voo
+        fwrite(&voo.qntAss, sizeof(int), 1, arquivo); // Quantidade de assentos
+        for (int j = 0; j < voo.qntAss; j++) {
+            fwrite(voo.Assentos_on[j], sizeof(Assento), 1, arquivo);
+        }
+
+        // Salva as reservas associadas ao voo
+        fwrite(&voo.qntRess, sizeof(int), 1, arquivo); // Quantidade de reservas
+        for (int k = 0; k < voo.qntRess; k++) {
+            fwrite(voo.Reservas_on[k], sizeof(Reserva), 1, arquivo);
+        }
     }
 
     fclose(arquivo);
-    printf("Voos salvos com sucesso em arquivo binário!\n");
+    printf("Dados dos voos, assentos e reservas salvos com sucesso!\n");
 }
 

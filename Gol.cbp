@@ -32,7 +32,17 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Assento.h" />
+		<Unit filename="include/Passageiro.h" />
+		<Unit filename="include/Reserva.h" />
+		<Unit filename="include/Tripulacao.h" />
+		<Unit filename="include/Voo.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Assento.cpp" />
+		<Unit filename="src/Passageiro.cpp" />
+		<Unit filename="src/Reserva.cpp" />
+		<Unit filename="src/Tripulacao.cpp" />
+		<Unit filename="src/Voo.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
