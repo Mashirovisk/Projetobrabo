@@ -2,6 +2,7 @@
 #include "include/Passageiro.h"
 #include "include/Tripulacao.h"
 #include "include/Voo.h"
+#include "include/Reserva.h"
 #include <iostream>
 
 
@@ -67,7 +68,7 @@ void menuPassageiros() {
                 cin.ignore(); // Limpar o buffer
                 cout << "Nome: ";
                 cin.getline(nome, TAM_NOME);
-                cout << "Endereço: ";
+                cout << "Endereco: ";
                 cin.getline(endereco, TAM_ENDERECO);
                 cout << "Telefone: ";
                 cin.getline(telefone, TAM_TELEFONE);
@@ -103,7 +104,7 @@ void menuPassageiros() {
             break;
 
         default:
-            cout << "Opção invalida. Tente novamente.\n";
+            cout << "Opcao invalida. Tente novamente.\n";
         }
     } while (opcao != 5);
 }
@@ -127,12 +128,12 @@ void menuTripulantes() {
             char nome[TAM_NOME], endereco[TAM_ENDERECO], telefone[TAM_TELEFONE];
 
             cout << "\nDigite os dados do tripulante:\n";
-            cout << "Código: ";
+            cout << "Codigo: ";
             cin >> codigo;
             cin.ignore(); // Limpar o buffer
             cout << "Nome: ";
             cin.getline(nome, TAM_NOME);
-            cout << "Endereço: ";
+            cout << "Endereco: ";
             cin.getline(endereco, TAM_ENDERECO);
             cout << "Telefone: ";
             cin.getline(telefone, TAM_TELEFONE);
@@ -237,7 +238,7 @@ void menuVoo() {
         case 3: {
             // Atualizando um voo
             int codigoAtualizar;
-            cout << "Digite o código do voo a ser atualizado: ";
+            cout << "Digite o codigo do voo a ser atualizado: ";
             cin >> codigoAtualizar;
             Voo::atualizarVoo(codigoAtualizar);  // Atualiza o voo com o código fornecido
             break;
@@ -258,7 +259,7 @@ void menuVoo() {
             break;
 
         default:
-            cout << "Opção invalida. Tente novamente.\n";
+            cout << "Opcao invalida. Tente novamente.\n";
         }
     } while (opcao != 5);
 }
@@ -324,6 +325,71 @@ void menuAssentos() {
 }
 
 
+void menuReservas() {
+    int opcao;
+    do {
+        cout << "\n--- Gerenciamento de Voos ---\n";
+        cout << "1. Adicionar Reserva\n";
+        cout << "2. Atualizar Reserva\n";
+        cout << "3. Deletar Reserva\n";
+        cout << "4. Listar Reservas\n";
+        cout << "5. Voltar ao Menu Principal\n";
+        cout << "Escolha uma opcao: ";
+        cin >> opcao;
+
+        switch (opcao) {
+        case 1: {
+
+                Reserva::CadastrarReserva();
+                break;
+        }
+        case 2:
+            {
+                int reservaId;
+                cout << "Digite o numero da reserva a ser atualizada: ";
+                cin >> reservaId;
+
+                // Buscar a reserva com o ID fornecido
+                Reserva* reservaParaAtualizar = Reserva::buscarporId(reservaId);
+
+                // Verifica se a reserva foi encontrada
+                if (reservaParaAtualizar == nullptr) {
+                    cout << "Reserva não encontrada!" << endl;
+                } else {
+                // Chama o método para atualizar a reserva
+                    reservaParaAtualizar->AtualizarReserva(reservaId);
+    }
+
+
+
+                break;
+
+        }
+        case 3: {
+
+                int numero;
+                cout << "Digite o numero da reserva: ";
+                cin>>numero;
+                Reserva::Deletar(numero);
+
+             break;
+        }
+
+        case 4: {
+                Reserva::listarReservas();
+            break;
+        }
+        case 5:{
+             cout << "Voltando ao menu principal...\n";
+            break;
+        }
+
+
+        default:
+            cout << "Opção invalida. Tente novamente.\n";
+        }
+    } while (opcao != 5);
+}
 
 
 
@@ -339,8 +405,11 @@ int main() {
         cout << "2. Gerenciar Tripulantes\n";
         cout << "3. Gerenciar Voos\n";  // Nova opção de submenu para voos
         cout << "4. Gerenciar Assentos\n";
-        cout << "5. Sair\n";
-        cout << "Escolha uma opção: ";
+        cout << "5. Gerenciar Reservas\n";
+        cout << "6. Backup\n";
+        cout << "7. Carregar Backup\n";
+        cout << "8. Sair\n";
+        cout << "Escolha uma opcao: ";
         cin >> opcao;
 
         switch (opcao) {
@@ -357,13 +426,30 @@ int main() {
             menuAssentos();
             break;
         case 5:
-
+            menuReservas();
+            break;
+        case 6:
+            Passageiro::salvarEmArquivoBinario("passageiros.bin");
+            Assento::salvarEmArquivoBinario("assentos.bin");
+            Tripulacao::salvarEmArquivoBinario("tripulantes.bin");
+            Reserva::salvarEmArquivo("Reserva.bin");
+            Voo::salvarEmArquivoBinario("Reserva.bin");
+            break;
+        case 7:
+            Passageiro::carregarDeArquivoBinario("passageiros.bin");
+            Assento::carregarDeArquivoBinario("assentos.bin");
+            Tripulacao::carregarDeArquivoBinario("tripulantes.bin");
+            Reserva::carregarDeArquivoBinario("Reserva.bin");
+            Voo::carregarDeArquivoBinario("Reserva.bin");
+            break;
+        case 8:
+            cout << "Saindo.....\n";
             break;
         default:
             cout << "Opção inválida. Tente novamente.\n";
         }
         }
-    } while (opcao != 5);
+    } while (opcao != 8);
 
     return 0;
 }

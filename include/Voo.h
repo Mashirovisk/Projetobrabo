@@ -3,11 +3,17 @@
 
 #include "Tripulacao.h"  // Supondo que Tripulacao seja uma classe já implementada.
 #include "Assento.h"  // Assento provavelmente seria uma classe também.
+#include "Reserva.h"
+#include "Passageiro.h"
+
+class Reserva;  // Declaração antecipada da classe Reserva
+
 
 const int MAX_VOOS = 20;  // Número máximo de voos
 const int MAX_VOO_ASSENTOS = 10;  // Número máximo de assentos por voo
 const int MAX_TRIPULACAO = 3;  // Número máximo de tripulantes por voo
 const int TAM_NOME = 50;  // Tamanho máximo para nome
+const int RESS=20;
 
 class Voo {
 private:
@@ -25,12 +31,19 @@ private:
     bool tripCadastrados;
 
 
+    Reserva *Reservas_on[RESS];
+    int qntRess;
+
+
+
+
     Assento *Assentos_on[MAX_VOO_ASSENTOS];
     int qntAss;
 
     // Vetor de tripulantes
     Tripulacao tripulacao_on[MAX_TRIPULACAO];
     int contadorTripulacao;
+
 
     // Vetor de voos e contador de voos cadastrados
     static Voo Voos[MAX_VOOS];
@@ -80,6 +93,15 @@ public:
     int adicionarAssento(Assento* assento);
 
     void DeletarAssento(int num);
+    int adicionarReserva(Reserva* reserva);
+    void DeletarReserva(int id);
+
+
+    Voo* buscarstatus(int id);
+
+
+    static void salvarEmArquivoBinario(const char* nomeArquivo);
+    static void carregarDeArquivoBinario(const char* nomeArquivo);
 };
 
 #endif  // FIM DO VOO_H

@@ -1,6 +1,10 @@
 #include "include/Assento.h"
 #include "include/Voo.h"
 #include <iostream>
+#include <cstdio>
+#include <iostream>
+
+
 
     using namespace std;
 
@@ -103,9 +107,10 @@ void Assento::ListarAssentos() {
 
     for (int i = 0; i < qntAsse; i++) {
         cout << "Assento: " << listaAssento[i]->getNum() << ", Voo ID: " << listaAssento[i]->getVooId()
-             << ", Status: " << (listaAssento[i]->getstatus() == 0 ? "Disponível" : "Ocupado") << endl;
+             << ", Status: " << (listaAssento[i]->getstatus() == 0 ? "Disponivel" : "Ocupado") << endl;
     }
 }
+
 void Assento::Deletar(int num){
 
     Assento* ass=buscarporId(num);
@@ -152,4 +157,66 @@ void Assento::AtualizarAssento() {
     cin >> novoStatus;
     setStatus(novoStatus);
     cout << "Status atualizado com sucesso!" << endl;
+}
+
+
+  int Assento::buscarstatus(int id) {
+    for (int i = 0; i < qntAsse; i++) {
+        if (listaAssento[i]->getVooId() == id) { // Verifica o ID do assento
+            return listaAssento[i]->getstatus(); // Retorna o status do assento encontrado
+        }
+    }
+    return -1; // Retorna -1 se nenhum assento for encontrado
+}
+
+
+void Assento::salvarEmArquivoBinario(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "wb");
+    if (arquivo == nullptr) {
+        cout << "Erro ao abrir o arquivo para salvar!" << endl;
+        return;
+    }
+
+    // Primeiro, escrevemos a quantidade de assentos no arquivo
+    fwrite(&qntAsse, sizeof(int), 1, arquivo);
+
+    // Em seguida, escrevemos os dados de cada assento
+    for (int i = 0; i < qntAsse; i++) {
+        fwrite(listaAssento[i], sizeof(Assento), 1, arquivo);
+    }
+
+    fclose(arquivo);
+    cout << "Assentos salvos com sucesso no arquivo binario!" << endl;
+}
+
+void Assento::carregarDeArquivoBinario(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "rb");
+    if (arquivo == nullptr) {
+        cout << "Erro ao abrir o arquivo para carregar!" << endl;
+        return;
+    }
+
+    // Primeiro, lemos a quantidade de assentos no arquivo
+    fread(&qntAsse, sizeof(int), 1, arquivo);
+
+    // Garantir que não excedemos o máximo permitido
+    if (qntAsse > MAXASSENTOS) {
+        cout << "Erro: numero de assentos no arquivo excede o limite permitido!" << endl;
+        fclose(arquivo);
+        return;
+    }
+
+    // Limpamos a lista atual antes de carregar os novos dados
+    for (int i = 0; i < qntAsse; i++) {
+        delete listaAssento[i];
+    }
+
+    // Carregamos os dados de cada assento
+    for (int i = 0; i < qntAsse; i++) {
+        listaAssento[i] = new Assento(); // Criamos um novo assento
+        fread(listaAssento[i], sizeof(Assento), 1, arquivo);
+    }
+
+    fclose(arquivo);
+    cout << "Assentos carregados com sucesso do arquivo binario!" << endl;
 }

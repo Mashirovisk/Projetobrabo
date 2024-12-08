@@ -40,6 +40,13 @@ class Assento
     static void Deletar(int num);
 
     void AtualizarAssento();
+    static int buscarstatus(int id);
+    static void carregarDeArquivoBinario(const char* nomeArquivo);
+    static void salvarEmArquivoBinario(const char* nomeArquivo);
+
+
+
+
 
 };
 

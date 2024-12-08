@@ -52,6 +52,8 @@ public:
 
     // Método de busca por código e cargo
     static Tripulacao* buscarPorCodigo(int cod, int cargo);
+    static void salvarEmArquivoBinario(const char* nomeArquivo);
+    static void carregarDeArquivoBinario(const char* nomeArquivo);
 };
 
 #endif // TRIPULACAO_H

@@ -1,46 +1,62 @@
 # depslib dependency file v1.0
-1733545682 source:c:\users\mashiro\downloads\a\gol\src\assento.cpp
+1733629250 source:c:\users\mashiro\downloads\a\gol\src\assento.cpp
 	"include/Assento.h"
 	"include/Voo.h"
 	<iostream>
+	<cstdio>
+	<iostream>
 
-1733407690 source:c:\users\mashiro\downloads\a\gol\src\reserva.cpp
+1733613949 source:c:\users\mashiro\downloads\a\gol\src\reserva.cpp
 	"include/Reserva.h"
+	<iostream>
+	"include/Voo.h"
+	"include/Passageiro.h"
+	"include/Assento.h"
 
-1733545176 source:c:\users\mashiro\downloads\a\gol\src\voo.cpp
+1733616064 source:c:\users\mashiro\downloads\a\gol\src\voo.cpp
 	"include/Voo.h"
 	"include/Assento.h"
 	<iostream>
 	<cstring>
+	<fstream>
+	<cstdio>
 
-1733544346 source:c:\users\mashiro\downloads\a\gol\src\tripulacao.cpp
+1733611971 source:c:\users\mashiro\downloads\a\gol\src\tripulacao.cpp
 	<iostream>
 	<cstring>
 	"include/Tripulacao.h"
 
-1733544735 source:c:\users\mashiro\downloads\a\gol\main.cpp
+1733616665 source:c:\users\mashiro\downloads\a\gol\main.cpp
 	"include/Assento.h"
 	"include/Passageiro.h"
 	"include/Tripulacao.h"
 	"include/Voo.h"
+	"include/Reserva.h"
 	<iostream>
 	<iostream>
 
-1733545439 c:\users\mashiro\downloads\a\gol\include\assento.h
+1733616868 c:\users\mashiro\downloads\a\gol\include\assento.h
 
-1733434529 c:\users\mashiro\downloads\a\gol\include\passageiro.h
+1733610893 c:\users\mashiro\downloads\a\gol\include\passageiro.h
 	<iostream>
 	<string.h>
 
-1733435300 source:c:\users\mashiro\downloads\a\gol\src\passageiro.cpp
+1733612142 source:c:\users\mashiro\downloads\a\gol\src\passageiro.cpp
 	"include/Passageiro.h"
 	<iostream>
+	<cstdio>
+	<iostream>
 
-1733531662 c:\users\mashiro\downloads\a\gol\include\tripulacao.h
+1733612049 c:\users\mashiro\downloads\a\gol\include\tripulacao.h
 	<iostream>
 	<cstring>
 
-1733545130 c:\users\mashiro\downloads\a\gol\include\voo.h
+1733616111 c:\users\mashiro\downloads\a\gol\include\voo.h
 	"Tripulacao.h"
 	"Assento.h"
+	"Reserva.h"
+	"Passageiro.h"
+
+1733614006 c:\users\mashiro\downloads\a\gol\include\reserva.h
+	"Voo.h"
 

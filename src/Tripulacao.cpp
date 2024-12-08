@@ -189,3 +189,41 @@ bool Tripulacao::setCargo(int c) {
     }
     return nullptr; // Se não encontrar, retorna nullptr
 }
+
+
+
+// Função para salvar os tripulantes em um arquivo binário
+void Tripulacao::salvarEmArquivoBinario(const char* nomeArquivo) {
+    FILE *arquivo = fopen(nomeArquivo, "wb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para salvar!\n");
+        return;
+    }
+
+    // Salvar a quantidade de tripulantes
+    fwrite(&quantidade, sizeof(int), 1, arquivo);
+
+    // Salvar os dados dos tripulantes
+    fwrite(listaTripulantes, sizeof(Tripulacao), quantidade, arquivo);
+
+    fclose(arquivo);
+    printf("Tripulantes salvos com sucesso em arquivo binario!\n");
+}
+
+// Função para carregar os tripulantes de um arquivo binário
+void Tripulacao::carregarDeArquivoBinario(const char* nomeArquivo) {
+    FILE *arquivo = fopen(nomeArquivo, "rb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para carregar!\n");
+        return;
+    }
+
+    // Carregar a quantidade de tripulantes
+    fread(&quantidade, sizeof(int), 1, arquivo);
+
+    // Carregar os dados dos tripulantes
+    fread(listaTripulantes, sizeof(Tripulacao), quantidade, arquivo);
+
+    fclose(arquivo);
+    printf("Tripulantes carregados com sucesso de arquivo binario!\n");
+}

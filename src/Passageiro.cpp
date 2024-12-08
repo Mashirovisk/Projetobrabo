@@ -1,5 +1,7 @@
 #include "include/Passageiro.h"
 #include <iostream>
+#include <cstdio>
+#include <iostream>
 using namespace std;
 
 // Inicialização do vetor estático e da quantidade
@@ -27,7 +29,7 @@ void Passageiro::adicionarPontos(int pontos) {
     if (pontos > 0) {
         pontosFidelidade += pontos;
     } else {
-        cout << "Pontos inválidos! Apenas valores positivos são permitidos.\n";
+        cout << "Pontos invalidos! Apenas valores positivos sao permitidos.\n";
     }
 }
 
@@ -37,7 +39,7 @@ void Passageiro::exibirInformacoes() const {
          << "\nNome: " << nome
          << "\nEndereço: " << endereco
          << "\nTelefone: " << telefone
-         << "\nFidelidade: " << (fidelidade ? "Sim" : "Não")
+         << "\nFidelidade: " << (fidelidade ? "Sim" : "Nao")
          << "\nPontos de Fidelidade: " << pontosFidelidade << endl;
 }
 
@@ -115,6 +117,11 @@ bool Passageiro::adicionarPassageiro(const Passageiro& p) {
 
 
 
+bool Passageiro::getfidelidade() const{
+    return fidelidade;
+}
+
+
 void Passageiro::listarPassageiros() {
     if (quantidade == 0) {
         cout << "Nenhum passageiro cadastrado.\n";
@@ -164,4 +171,62 @@ bool Passageiro::atualizarPassageiro(int cod, const Passageiro& novoPassageiro) 
     }
     cout << "Passageiro com codigo " << cod << " nao encontrado.\n";
     return false;
+}
+
+
+
+
+Passageiro* Passageiro::BuscarPasporId(int id){
+    for(int i=0;i<quantidade;i++){
+        if(listaPassageiros[i].getCodigo()==id){
+            return &listaPassageiros[i];
+        }
+        return nullptr;
+    }
+}
+
+
+
+// Função para salvar os passageiros em um arquivo binário
+void Passageiro::salvarEmArquivoBinario(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "wb"); // Abre o arquivo para escrita binária
+    if (arquivo == nullptr) {
+        std::cout << "Erro ao abrir o arquivo para salvar os passageiros." << std::endl;
+        return;
+    }
+
+    // Salva a quantidade de passageiros
+    fwrite(&quantidade, sizeof(quantidade), 1, arquivo);
+
+    // Salva todos os passageiros
+    for (int i = 0; i < quantidade; ++i) {
+        // Escreve as informações do passageiro
+        fwrite(&listaPassageiros[i], sizeof(Passageiro), 1, arquivo);
+    }
+
+    fclose(arquivo); // Fecha o arquivo
+    std::cout << "Passageiros salvos com sucesso!" << std::endl;
+}
+
+
+
+
+
+void Passageiro::carregarDeArquivoBinario(const char* nomeArquivo) {
+    FILE* arquivo = fopen(nomeArquivo, "rb"); // Abre o arquivo para leitura binária
+    if (arquivo == nullptr) {
+        std::cout << "Erro ao abrir o arquivo para carregar os passageiros." << std::endl;
+        return;
+    }
+
+    // Lê a quantidade de passageiros
+    fread(&quantidade, sizeof(quantidade), 1, arquivo);
+
+    // Lê todos os passageiros
+    for (int i = 0; i < quantidade; ++i) {
+        fread(&listaPassageiros[i], sizeof(Passageiro), 1, arquivo);
+    }
+
+    fclose(arquivo); // Fecha o arquivo
+    std::cout << "Passageiros carregados com sucesso!" << std::endl;
 }

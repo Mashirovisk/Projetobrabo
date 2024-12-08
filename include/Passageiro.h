@@ -32,6 +32,9 @@ public:
     static void listarPassageiros();
     static Passageiro* buscarPorCodigo(int cod);
 
+    bool getfidelidade() const;  // Método que verifica se o passageiro é de fidelidade
+    int getPontosFidelidade() const;  // Retorna os pontos de fidelidade do passageiro
+
     // Métodos da instância
     void adicionarPontos(int pontos);
     void exibirInformacoes() const;
@@ -49,6 +52,12 @@ public:
 
     static bool deletarPassageiro(int cod); // Novo método
     static bool atualizarPassageiro(int cod, const Passageiro& novoPassageiro);
+
+    static Passageiro* BuscarPasporId(int id);
+
+
+    static void carregarDeArquivoBinario(const char* nomeArquivo);
+    static void salvarEmArquivoBinario(const char* nomeArquivo);
 };
 
 #endif // PASSAGEIRO_H

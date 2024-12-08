@@ -2,7 +2,8 @@
 #include "include/Assento.h"
 #include <iostream>
 #include <cstring>  // Para usar funções de manipulação de strings como strcpy
-
+#include <fstream>
+#include <cstdio>    // Necessário para leitura e gravação de arquivos
 using namespace std;
 
 // Definindo as variáveis estáticas
@@ -26,6 +27,7 @@ Voo::Voo() {
     status = false;
     tripCadastrados=false;
     qntAss=0;
+    qntRess=0;
 
 }
 
@@ -38,6 +40,7 @@ Voo::Voo(int id, const char* origem, const char* destino, const char* data, cons
     this->tarifa = tarifa;
     this->status = true;  // Voo ativo por padrão
     qntAss=0;
+    qntRess=0;
 }
 int Voo::getId() const {
     return id;
@@ -246,9 +249,9 @@ void Voo::cadastrarVoo(){
     Voos[qntVoo++]=voo;
 
     if (voo.status) {
-        cout << "Voo cadastrado com sucesso e está ativo!" << endl;
+        cout << "Voo cadastrado com sucesso e esta ativo!" << endl;
     } else {
-        cout << "Voo cadastrado, mas está inativo (sem piloto ou copiloto)." << endl;
+        cout << "Voo cadastrado, mas esta inativo (sem piloto ou copiloto)." << endl;
     }
 
 }
@@ -276,7 +279,7 @@ void Voo::listarVoos() {
             cout << "Status: Inativo" << endl;
         }
 
-        cout << "Tripulação:" << endl;
+        cout << "Tripulacao:" << endl;
         // Verifique se a função `getNome` está funcionando corretamente para os tripulantes
         cout << "Piloto: " << voo.tripulacao_on[0].getNome() << endl;
         cout << "Copiloto: " << voo.tripulacao_on[1].getNome() << endl;
@@ -288,9 +291,16 @@ void Voo::listarVoos() {
         cout<<"Status 0-Disponivel 1-indisponivel:"<<endl;
         for(int j=0;j<voo.qntAss;j++){
             Assento* Assento =voo.Assentos_on[j];
-            cout<< " Assento ID: "<<Assento->getNum() << " Status " <<Assento->getstatus()<<endl;
+            cout<< "Assento ID: "<<Assento->getNum() << " Status " <<Assento->getstatus()<<endl;
         }
         cout<<"--------------------------------"<<endl;
+
+        for(int k=0;k<voo.qntRess;k++){
+            Reserva* Reserva = voo.Reservas_on[k];
+            cout<<"Reserva ID:"<<Reserva->getReserva_id();
+            cout <<"Passageiro ID"<<Reserva->getPassageiro_id();
+        }
+
 
     }
 }
@@ -372,7 +382,7 @@ void Voo::atualizarVoo(int id) {
             cin >> copiloto_Id;
             Tripulacao* Copiloto = Tripulacao::buscarPorCodigo(copiloto_Id, 2);
             if (Copiloto == nullptr) {
-                cout << "Copiloto não existe!" << endl;
+                cout << "Copiloto nao existe!" << endl;
                 return;
             }
             if(tripulanteDup(copiloto_Id)){
@@ -388,7 +398,7 @@ void Voo::atualizarVoo(int id) {
             cin >> Comissario_Id;
             Tripulacao* Comissario = Tripulacao::buscarPorCodigo(Comissario_Id, 3);
             if (Comissario == nullptr) {
-                cout << "Comissário não existe!" << endl;
+                cout << "Comissario nao existe!" << endl;
                 return;
             }
 
@@ -407,10 +417,11 @@ void Voo::atualizarVoo(int id) {
             cout << "Voo ID " << id << " atualizado com sucesso!" << endl;
             break;
         }
+        cout<<endl;
     }
 
     if (!vooEncontrado) {
-        cout << "Voo com ID " << id << " não encontrado!" << endl;
+        cout << "Voo com ID " << id << " nao encontrado!" << endl;
     }
 }
 
@@ -453,4 +464,79 @@ void Voo::DeletarAssento(int num){
     cout<<"Assento nao encontrado"<<endl;
 }
 
+int Voo::adicionarReserva(Reserva* reserva){
+    Reservas_on[qntRess++]=reserva;
+}
+
+void Voo::DeletarReserva(int id) {
+
+    if(qntRess <= 0){
+        cout << "Nao ha Reservas para deletar" << endl;
+        return;
+    }
+
+    for (int i = 0; i < qntRess; i++) {
+        if (Reservas_on[i]->getReserva_id() == id) {
+            // Obter o ID do assento associado à reserva
+            int assento_id = Reservas_on[i]->getAssento_id();  // Método que retorna o ID do assento da reserva
+
+            // Buscar o assento usando o ID
+            Assento* assento = Assento::buscarporId(assento_id);
+            if (assento != nullptr) {
+                assento->setStatus(0);  // Alterar status do assento para "livre" (presumindo que "0" é livre)
+                cout << "Status do assento alterado para 'livre'" << endl;
+            }
+
+            // Remover reserva do vetor (deslocando os elementos)
+            for (int j = i; j < qntRess - 1; j++) {
+                Reservas_on[j] = Reservas_on[j + 1];  // Desloca as reservas à frente
+            }
+            qntRess--;  // Decrementa a quantidade de reservas
+            cout << "Reserva " << id << " deletada com sucesso!" << endl;
+            return;
+        }
+    }
+
+    cout << "Reserva não encontrada!" << endl;  // Caso o id não seja encontrado
+}
+
+void Voo::carregarDeArquivoBinario(const char* nomeArquivo) {
+    // Abre o arquivo para leitura binária
+    FILE* arquivo = fopen(nomeArquivo, "rb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para carregar!\n");
+        return;
+    }
+
+    // Carregar a quantidade de voos
+    fread(&qntVoo, sizeof(int), 1, arquivo);
+
+    // Carregar os dados dos voos
+    for (int i = 0; i < qntVoo; i++) {
+        fread(&Voos[i], sizeof(Voo), 1, arquivo);
+    }
+
+    fclose(arquivo);
+    printf("Voos carregados com sucesso de arquivo binário!\n");
+}
+
+void Voo::salvarEmArquivoBinario(const char* nomeArquivo) {
+    // Abre o arquivo para escrita binária
+    FILE* arquivo = fopen(nomeArquivo, "wb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para salvar!\n");
+        return;
+    }
+
+    // Salva a quantidade de voos
+    fwrite(&qntVoo, sizeof(int), 1, arquivo);
+
+    // Salva os dados dos voos
+    for (int i = 0; i < qntVoo; i++) {
+        fwrite(&Voos[i], sizeof(Voo), 1, arquivo);
+    }
+
+    fclose(arquivo);
+    printf("Voos salvos com sucesso em arquivo binário!\n");
+}
 
